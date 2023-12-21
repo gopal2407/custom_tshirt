@@ -1,0 +1,114 @@
+{% extends 'custome_app/customer_homepage.html' %}
+
+{% block title %}
+<title> Customer Home </title>
+{% endblock %}
+
+{% block main %}
+<h1>Filter Page</h1>
+
+{{ filter_data }}
+
+<form class="border border-5">
+<table class="table table-hover table-secondary">
+    <tr>
+        <td>
+            <label for="category">Choose Category:</label>
+
+                <select name="category" id="category">
+                    <option value=""></option>
+                    {% for category in categories %}
+                        {% if filter_data.category == category.id|stringformat:"i" %}
+                        <option value="{{ category.id }}" selected="selected">{{ category.name }}</option>
+                        {% else %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+            <label for="subcategory">Choose Sub-category:</label>
+
+                <select name="subacategory" id="subcategory">
+                    <option value=""></option>
+                    {% for subcategory in subcategories %}
+                        <option value="{{ subacategory.id }}">{{ subcategory.name }}</option>
+                    {% endfor %}
+                </select>
+
+            <label for="color">Choose Color:</label>
+
+                <select name="color" id="color">
+                    <option value=""></option>
+                    {% for color in colors %}
+                        <option value="{{ color.id }}">{{ color.name }}</option>
+                    {% endfor %}
+                </select>
+
+            <label for="size">Choose Size:</label>
+
+                <select name="size" id="size">
+                    <option value=""></option>
+                    {% for size in sizes %}
+                        <option value="{{ size.id }}">{{size.name}}</option>
+                    {% endfor %}
+                </select>
+
+        </td>
+
+    </tr>
+
+    <tr>
+        <td>
+            <label for="min_price">Minimum Price</label><br>
+            <input type="number" id="min_price" name="min_price" >
+        </td>
+
+         <td>
+            <label for="max_price">Maximum Value</label><br>
+            <input type="number" id="max_price" name="max_price" >
+        </td>
+
+           <td><input type="submit"> Search </a></td>
+            <td><a href="{% url 'cust_home_url' %}" class="btn btn-default">  Reset </a></td>
+
+
+    </tr>
+</table>
+</form>
+
+<div style="overflow-y:auto;" class="w-70">
+<!--    {{ error }}-->
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th> Name </th>
+            <th> Size </th>
+            <th> Color </th>
+            <th> Price </th>
+            <th> Category </th>
+            <th> Subcategory </th>
+
+            <th colspan="2"> Action </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+            {% for item in items %}
+                <tr>
+                    <td> {{item.name}} </td>
+                    <td> {{item.item_size.name}} </td>
+                    <td> {{item.color.name}} </td>
+                    <td> {{item.price}} </td>
+                    <td> {{item.subcategory.category.name}} </td>
+                    <td> {{item.subcategory.name}} </td>
+                    <td>
+                        <a class="btn btn-warning">Add to Cart</a>
+                        <a href="{% url 'buy_url' item.id %}" class="btn btn-danger">Buy</a>
+                    </td>
+                </tr>
+            {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

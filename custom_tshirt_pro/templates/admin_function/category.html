@@ -1,0 +1,63 @@
+{% extends 'custome_app/admin_hompage.html' %}
+
+{% block main %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h2 style="text-align: center;"><u>Category Master</u></h2>
+        </div>
+        <div class="col-3">
+            {{ error }}
+            {% if del_category %}
+                <form method="post" style="border: 1px solid rgb(230,230,230);">
+                    {% csrf_token %}
+                    <h3 style="color:red;"> Are you sure to delete this record?</h3>
+                    <input type="hidden" value="{{ del_category.id}}" name="id">
+                    <input type="submit" class="btn btn-danger" value="DELETE"/>
+                    <a class="btn btn-info" href="{% url 'category_view_url' %}">CANCEL</a>
+                </form>
+            {% else %}
+                <form method="post" class="p-3" style="border:1px solid rgb(240,240,240);">
+                    {% csrf_token %}
+                    <div class="mb-3 mt-3">
+                        <label>ID: <b>{{category.id}}</b></label>
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <label>Category Name</label>
+                        <input type="text" class="form-control" name="name" value="{{category.name}}" />
+                    </div>
+                    <div class="mb-3 mt-3">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="reset" class="btn btn-danger">Cancel</button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+        <div class="col-9">
+            <table class="table table-stripped">
+                <thead style="">
+                    <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ category.name }}</td>
+                        <td>
+                            <a class="btn btn-warning" href="{% url 'category_view_edit_url' category.id %}">Edit</a>
+                            <a class="btn btn-danger" href="{% url 'category_view_delete_url' category.id %}">DEL</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

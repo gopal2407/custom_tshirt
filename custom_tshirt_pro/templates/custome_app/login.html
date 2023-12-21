@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title> Login Page </title>
+{% endblock %}
+
+{% block main %}
+<form method="post">
+    {% csrf_token %}
+<table>
+    <tr>
+      <td>UserName</td>
+      <td><input type="text" name="username" class="form-control"></td>
+    </tr>
+
+    <tr>
+      <td>Password</td>
+      <td><input type="password" name="password" class="form-control"></td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <button type="submit" class="btn btn-success mr-1">Submit</button>
+            <button type="reset" class="btn btn-danger">Reset</button>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" style="color: red;">  {{msg }}</td>
+    </tr>
+
+</table>
+</form>
+
+
+
+{% endblock %}

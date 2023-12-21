@@ -1,0 +1,124 @@
+{% extends 'custome_app/owner_homepage.html' %}
+
+{% block title %}
+<title> Add Item (By Owner) </title>
+{% endblock %}
+
+
+
+{% block main %}
+
+{{ item_sizes }}
+{{ colors }}
+{{ subacategories }}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h2 style="text-align: center;"><u> Add Item </u></h2>
+        </div>
+        <div class="col-3">
+            {{ error }}
+            {% if del_item %}
+                <form method="post" style="border: 1px solid rgb(230,230,230);">
+                    {% csrf_token %}
+                    <h3 style="color:red;"> Are you sure to delete this record?</h3>
+                    <input type="hidden" value="{{ del_item.id}}" name="id">
+                    <input type="submit" class="btn btn-danger" value="DELETE"/>
+                    <a class="btn btn-info" href="{% url 'add_item_url' %}">CANCEL</a>
+                </form>
+            {% else %}
+                <form method="post" class="p-3" style="border:1px solid rgb(240,240,240);">
+                    {% csrf_token %}
+                    <div class="mb-3 mt-3">
+                        <label>ID: <b>{{item.id}}</b></label>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name" value="{{item.name}}" />
+                    </div>
+
+                    <label>Choose the size</label>
+                    <select name="size" id="size" class="form-control">
+                    {% for size in item_sizes %}
+                        <option value="{{ size.id }}"> {{ size.name }} </option>
+                    {% endfor %}
+                    </select>
+
+
+                    <div class="mb-3 mt-3">
+                        <label>Price</label>
+                        <input type="text" class="form-control" name="price" value="{{item.price}}" />
+                    </div>
+
+                    <label>Choose the color</label>
+                    <select name="color" id="color" class="form-control">
+                     {% for color in colors %}
+                        <option value="{{ color.id }}"> {{ color.name }} </option>
+                    {% endfor %}
+                    </select>
+                    <br><br>
+
+<!-- check below code and improve it -->
+
+                    <label>Choose the Subcategory</label>
+                    <select name="subcategory" id="subcategory" class="form-control">
+                     {% for subcategory in subacategories %}
+                        {% if item.subcategory_id == subcategory.id %}
+                                <option value="{{subcategory.id}}" selected="selected">{{ subcategory.name }}</option>
+                            {% else %}
+                       <option value="{{ subcategory.id }}"> {{ subcategory.name }} </option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                    <br><br>
+
+                    <div class="mb-3 mt-3">
+                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="reset" class="btn btn-danger">Cancel</button>
+                    </div>
+
+                </form>
+            {% endif %}
+        </div>
+
+<!--   Info Div     -->
+        <div class="col-9">
+            <h1> Owner Added Items Info </h1>
+            <table class="table table-stripped">
+                <thead style="">
+                    <tr>
+                        <th> ID </th>
+                        <th> Name </th>
+                        <th> Size </th>
+                        <th> Price </th>
+                        <th> Color </th>
+                        <th> Subcategory </th>
+                        <th> ACTION </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.item_size.name }}</td>    <!-- Error -->
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.color.name }}</td>
+                        <td>{{ item.subcategory.name }}</td>
+
+                        <td>
+                            <a class="btn btn-warning" href="{% url 'item_view_edit_url' item.id %}">Edit</a>
+                            <a class="btn btn-danger" href="{% url 'item_view_delete_url' item.id %}">DEL</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

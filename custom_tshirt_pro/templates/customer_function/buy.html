@@ -1,0 +1,115 @@
+{% extends 'custome_app/customer_homepage.html' %}
+
+{% block title %}
+<title> Buy Form </title>
+{% endblock %}
+
+{% block style %}
+<style>
+    tr, td{
+        padding: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+{{ item }}
+<h1> Buy Page </h1>
+
+<form class="border border-1" style="margin-left: 10px; width: 350px;padding:10px;" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+    <table>
+    <tbody>
+        <tr>
+            <td>
+                <h4>Name: {{ name }}</h4>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <label for="cust_text">Custom Text</label><br>
+            <input type="text" id="cust_text" name="cust_text" class="form-control">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="font">Choose the Font:</label>
+                <select name="font" id="font" class="form-control">
+                    <option value=""></option>
+                    {% for font in fonts %}
+                        <option value="{{ font.id }}">{{ font.name }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="image">Image</label><br>
+                <input type="file" id="image" name="image" class="form-control">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+            <label for="quantity">Quantity</label><br>
+            <input type="number" id="quantity" name="quantity" class="form-control">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+            <label for="unit_price">Unit  Price</label><br>
+            <input type="number" id="unit_price" name="unit_price" class="form-control" value="{{ price }}">
+            </td>
+        </tr>
+-
+        <tr>
+            <td>
+            <label for="total">Total</label><br>
+            <input type="number" id="total" name="total" class="form-control" disabled="disabled">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="address">Delivery Address :</label>
+                {% for adr in adressses %}
+                <h4>
+                <input type="radio" name="address" id="address" value="{{adr.id}}" class="form-control">
+                {{adr.street_name}}, {{adr.city}}, {{adr.state}}, {{adr.country}}, {{adr.pin}}, ({{adr.land_mark}})
+                {% endfor %}
+                </h4>
+            </td>
+        </tr>
+
+    <tr>
+        <td><button class='text-primary' type="submit"> Buy Now </button></td>
+    </tr>
+
+
+
+
+    </tbody>
+</table>
+</form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    window.onload = function(){
+        document.getElementById("quantity").onkeyup = function(e){
+            f = e.keyCode == 49 || e.keyCode == 50 || e.keyCode == 51 || e.keyCode == 52 || e.keyCode == 53
+            || e.keyCode == 54 || e.keyCode == 55 || e.keyCode == 56 || e.keyCode == 57 || e.keyCode == 48 || e.keyCode == 8;
+            try{
+                let tot_amt = parseFloat(document.getElementById("unit_price").value) * parseInt(this.value);
+                document.getElementById("total").value = tot_amt;
+            }catch(ex){
+                console.error(ex);
+            }
+        }
+    }
+</script>
+{% endblock %}
